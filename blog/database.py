@@ -18,5 +18,7 @@ class Entry(Base):
     title = Column(String(1024))
     content = Column(Text)
     datetime = Column(DateTime, default=datetime.datetime.now())
-
+    
+    #def generaet_summary(self):
+    #    return self.content[0:100]
 Base.metadata.create_all(engine)

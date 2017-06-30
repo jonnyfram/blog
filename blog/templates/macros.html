@@ -9,9 +9,16 @@
     </div>
     <div class="col-md-10">
         <h1>
-            {{ entry.title }}
+            <a href="/entry/{{entry.id}}/" title="Click to go to post">{{ entry.title }}</a>
         </h1>
         {{ entry.content | markdown }}
+        
+        <p>
+        <a href="/entry/{{entry.id}}/edit" title="Click here to edit post">Click here to edit</a>
+        </p>
+        <p>
+        <a href="/entry/{{entry.id}}/delete" title="Click here to delete post">Click here to delete</a>
+        </p>
     </div>
 </div>
 {% endmacro %}

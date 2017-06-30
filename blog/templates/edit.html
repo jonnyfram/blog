@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>
+    Edit Entry
+</h1>
+
+<form role="form" method="POST">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{title}}" required>
+    </div>
+    <div class="form-group">
+        <label for="content">Content</label>
+        <textarea class="form-control" id="content" name="content" value="{{content}}" rows="20" required>{{content}}</textarea>
+    </div>
+    <a href="/" class="btn btn-success">Submit</a>
+    <a href="/" class="btn btn-danger">Cancel</a>
+</form>
+{% endblock %}
