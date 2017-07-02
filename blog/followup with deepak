@@ -1,0 +1,10 @@
+url_for not working? show him and see if you can get a solution
+
+unable to follow up error if emailpassword is wrong- check with deepak
+unable to follow up error with get_flashed_messages- I do not see an alert
+I think my login system is wrong - it seems to register with correct users but does not redirect
+
+need to test the migration by adding an entry then viewing it
+
+follow up the heroku error - Deploying Flask Apps on Heroku
+

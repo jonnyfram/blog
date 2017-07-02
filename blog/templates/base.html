@@ -18,6 +18,9 @@
         <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
         <!-- Bootstrap -->
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        
+        
+        
     </head>
 
     <body>
@@ -40,7 +43,18 @@
         </div>
 
         <div class="container">
-            {% block content %}{% endblock %}
+            {% block content %}
+            
+            {% with messages = get_flashed_messages(with_categories = true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{message}}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% endblock %}
         </div>
     </body>
 </html>
