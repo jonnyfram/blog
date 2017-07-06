@@ -4,6 +4,8 @@
         <ul class="list-unstyled">
             <li>
                 {{ entry.datetime | dateformat("%d/%m/%y") }}
+            </li>
+            <li>
                 {{ entry.author.name }}
             </li>
         </ul>
@@ -12,14 +14,26 @@
         <h1>
             <a href="/entry/{{entry.id}}/" title="Click to go to post">{{ entry.title }}</a>
         </h1>
+
         {{ entry.content | markdown }}
         
         <p>
-        <a href="/entry/{{entry.id}}/edit" title="Click here to edit post">Click here to edit</a>
-        </p>
-        <p>
-        <a href="/entry/{{entry.id}}/delete" title="Click here to delete post">Click here to delete</a>
-        </p>
+            {% if current_user.is_authenticated and current_user.name == entry.author.name %}
+            
+            <a href="/entry/{{entry.id}}/edit" title="Click here to edit post">Click here to edit</a>
+            </p>
+            <p>
+            <a href="/entry/{{entry.id}}/delete" title="Click here to delete post">Click here to delete</a>
+            </p>    
+            
+
+            {% else %}
+            
+            <p>
+            <a href="/login" title="You must login to edit or delete posts">Must be logged in and author to delete</a>
+            </p>
+                
+            {% endif %}
     </div>
 </div>
 {% endmacro %}

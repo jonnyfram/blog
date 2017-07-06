@@ -29,23 +29,35 @@
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar">
+                            {% if current_user.name %}
+                            <a href="/entry/add"><button type="button" name="add-post" class="btn btn-default navbar-btn">Add Post</button></a></span>
+                            {% endif %}
+                        <span class="icon-bar">
+                            
+                            {% if current_user.name %}
+                            <a href="/logout"><button type="button" name="logout" class="btn btn-default navbar-btn">Logout</button></a>
+                            {% else %}
+                            <a href="/login"><button type="button" name="login" class="btn btn-default navbar-btn">Login</button></a>
+                            {% endif %}
+                            
+                        </span>
                         <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                        
                     </button>
                     <a class="navbar-brand" href="{{ url_for('entries') }}">Blogful</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
+                        <span class="icon-bar">
+                            <p class="navbar-text">Side bar</p>
+                        </span>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <div class="container">
-            {% block content %}
-            
-            {% with messages = get_flashed_messages(with_categories = true) %}
+        {% with messages = get_flashed_messages(with_categories = true) %}
             {% if messages %}
             {% for category, message in messages %}
             <div class="alert alert-{{ category }}">
@@ -53,7 +65,10 @@
             </div>
             {% endfor %}
             {% endif %}
-            {% endwith %}
+        {% endwith %}
+
+        <div class="container">
+            {% block content %}
             {% endblock %}
         </div>
     </body>

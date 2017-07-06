@@ -1,8 +1,9 @@
-from flask import render_template
+from flask import render_template, request, redirect, url_for
 from flask import flash
 from flask_login import login_user
 from flask_login import login_required
 from flask_login import current_user
+from flask_login import logout_user
 
 from werkzeug.security import check_password_hash
 
@@ -16,6 +17,7 @@ PAGINATE_BY = 10
 @app.route("/page/<int:page>/")
 def entries(page=1):
     #zero indexed page
+    print(current_user)
     page_index = page - 1
     
     #grabs the submission if submitted at top of page, uses predefined constant if no argument
@@ -69,13 +71,15 @@ def view_entry(id):
 
 # Edit entry
 @app.route("/entry/<int:id>/edit", methods=["GET"])
+@login_required
 def edit_entry_get(id):
     entry = session.query(Entry)
     entry = entry.filter(Entry.id == id).first()
     
-    return render_template("edit.html", title = entry.title, content = entry.content)
-    
+    return render_template("edit.html", title = entry.title, content = entry.content, entryid=entry.id)
+
 @app.route("/entry/<int:id>/edit", methods=["POST"])
+@login_required
 def edit_entry_post(id):
     entry = session.query(Entry)
     entry = entry.filter(Entry.id == id).first()
@@ -87,25 +91,16 @@ def edit_entry_post(id):
     
     return redirect(url_for("entries")) # this does not appear to happen- we stay on edit page
 
-@app.route("/entry/<int:id>/delete", methods=["GET"])
+@app.route("/entry/<int:id>/delete", methods=["GET", "POST"])
 @login_required
 def delete_entry_get(id):
     entry = session.query(Entry)
     entry = entry.filter(Entry.id == id).first()
-    return render_template("delete.html", title=entry.title)
-
-@app.route("/entry/<int:id>/delete", methods=["POST"])
-@login_required
-def delete_entry_post(id):
-    entry = session.query(Entry)
-    entry = entry.filter(Entry.id == id).first()
-    
     session.delete(entry)
     session.commit()
     
-    return redirect(url_for("entries")) # this does not appear to happen- we stay on edit page
-
-#CURRENTLY NON FUNCTIONAL
+    return render_template("delete.html", title=entry.title, entryid=entry.id)
+    
 #/?limit=20 and /page/2?limit=20
 @app.route("/?limit=<int:LIMIT>")
 @app.route("/page/<int:page>?limit=<int:LIMIT>")
@@ -149,10 +144,13 @@ def login_post():
     user = session.query(User).filter_by(email=email).first()
     if not user or not check_password_hash(user.password, password):
         flash("Incorrect username or password", "danger")
-        print("error logging in in login_post() method. This should have triggered the flash in browser")
+        print("error logging in in login_post() method. This should have triggered the flash in browser- did you see flashed_messages??")
         return redirect(url_for("login_get"))
         
     login_user(user)
     return redirect(request.args.get('next') or url_for("entries"))
-    #########url_for not working
-    #########unable to get flash errors in site also
+    
+@app.route("/logout")
+def logout():
+    logout_user()
+    return render_template("logged_out.html")

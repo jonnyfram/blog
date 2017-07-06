@@ -1,4 +1,6 @@
+{% import "macros.html" as macros with context %}
 {% extends "base.html" %}
+
 
 {% block content %}
 <h1>
@@ -7,11 +9,11 @@
 
 <form role="form" method="POST">
     
-    Click the button to delete {{title}}
+    Click the button to delete '{{title}}'
     
-    <a href="/" class="btn btn-success">Submit</a>
+    <a href="/"<button type="submit" class="btn btn-success">Delete</a></button>
     
-    <a href="/" class="btn btn-danger">Cancel</a>
+    <a href="/"<button type="submit" class="btn btn-danger">Cancel</a></button>
     
 </form>
 {% endblock %}
