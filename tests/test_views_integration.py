@@ -49,6 +49,35 @@ class TestViews(unittest.TestCase):
         self.assertEqual(entry.content, "Test content")
         self.assertEqual(entry.author, self.user)
         
+#test edit entry
+    def test_edit_entry(self):
+        self.simulate_login()
+        self.test_add_entry()
+        entries = session.query(Entry).all()
+        
+        response = self.client.post("/entry/1/edit", data={"title":"Title Edited", "content":"Content Edited"})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(urlparse(response.location).path, "/")
+        
+        entry = entries[0]
+        self.assertEqual(entry.title, "Title Edited")
+        self.assertEqual(entry.content, "Content Edited")
+        
+#test delete entry
+    def test_delete_entry(self):
+        self.simulate_login()
+        self.test_add_entry()
+        
+        response = self.client.post("/entry/1/delete")
+        
+        self.assertEqual(response.status_code, 302)
+
+        self.assertEqual(urlparse(response.location).path, "/")
+        
+        entries = session.query(Entry).all()
+        
+        self.assertEqual(len(entries), 0)
+
 if __name__ == "__main__":
     unittest.main()
         

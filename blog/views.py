@@ -91,15 +91,26 @@ def edit_entry_post(id):
     
     return redirect(url_for("entries")) # this does not appear to happen- we stay on edit page
 
-@app.route("/entry/<int:id>/delete", methods=["GET", "POST"])
+@app.route("/entry/<int:id>/delete", methods=["GET"])
 @login_required
 def delete_entry_get(id):
+    entry = session.query(Entry)
+    entry = entry.filter(Entry.id == id).first()
+    #session.delete(entry)
+    #session.commit()
+    
+    #return redirect(url_for("entries"))
+    return render_template("delete.html", title=entry.title, entryid=entry.id)
+    
+@app.route("/entry/<int:id>/delete", methods=["POST"])
+@login_required
+def delete_entry_post(id):
     entry = session.query(Entry)
     entry = entry.filter(Entry.id == id).first()
     session.delete(entry)
     session.commit()
     
-    return render_template("delete.html", title=entry.title, entryid=entry.id)
+    return redirect(url_for("entries"))
     
 #/?limit=20 and /page/2?limit=20
 @app.route("/?limit=<int:LIMIT>")
